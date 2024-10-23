@@ -1,11 +1,20 @@
-import { Select, Input } from 'antd';
-import { useId, useState } from 'react';
+import { Select, AutoComplete } from 'antd';
+import { useEffect, useId, useState } from 'react';
 
-const CmpFilterTask = ({ onChange }) => {
+const CmpFilterTask = ({ onChange, tasks }) => {
   const idSelectUser = useId();
   const [getFiltroBusq, setFiltroBusq] = useState({ idUser: '0', name: '' });
+  const [options, setOptions] = useState([]);
 
   const { Option } = Select;
+
+  useEffect(() => {
+    const mappedOptions = tasks.map(task => ({
+      label: task.name,
+      value: task.name,
+    }));
+    setOptions(mappedOptions);
+  }, [tasks]);
 
   const handleCbUser = value => {
     const name = getFiltroBusq.name;
@@ -14,16 +23,21 @@ const CmpFilterTask = ({ onChange }) => {
     onChange(newFiltroBusq);
   };
 
-  const handleName = event => {
-    const name = event.target.value;
-    const newFiltroBusq = { idUser: getFiltroBusq.idUser, name };
+  const handleName = value => {
+    const newFiltroBusq = { idUser: getFiltroBusq.idUser, name: value };
     setFiltroBusq(newFiltroBusq);
     onChange(newFiltroBusq);
   };
 
   return (
     <section className="filter">
-      <Input placeholder="Filtrar por nombre" onChange={handleName}></Input>
+      <AutoComplete
+        placeholder="Buscar por nombre"
+        options={options}
+        onSearch={handleName}
+        onSelect={handleName}
+        value={getFiltroBusq.name}
+      />
       <Select
         name="users"
         id={idSelectUser}

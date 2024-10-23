@@ -26,10 +26,11 @@ function App() {
       <Router>
         <CmpHeader /> {/* Siempre se muestra */}
         <Routes>
+          {/* HOMEE*/}
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<PageInicio />} />
 
-          {/* Ruta protegida */}
+          {/* Rutas protegidas CRUD TASK*/}
           <Route
             path="/tareas"
             element={
@@ -38,9 +39,26 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* Ruta de unauthorized */}
+          <Route
+            path="tareas/crear"
+            element={
+              <PrivateRoute>
+                <PageTask />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="tareas/edit/:id"
+            element={
+              <PrivateRoute>
+                <PageTask />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Rutas de error */}
           <Route path="/unauthorized" element={<Unauthorized />} />
-          {/* Ruta 404 */}
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>

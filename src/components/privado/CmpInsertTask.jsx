@@ -1,28 +1,33 @@
-import { useState, useEffect } from 'react';
-import { Input, Button, Select, Form } from 'antd';
-import { CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { useEffect } from 'react';
+import { Input, Button, Select, Form, Drawer, Flex } from 'antd';
+import {
+  PlusCircleOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom'; // Importar el hook useNavigate
 import axios from 'axios';
 
 const URLAPi = process.env.REACT_APP_URL_API_BACK;
 
-const CmpInsertTask = ({ onConfirm, selectedTaskEdit }) => {
+const CmpInsertTask = ({ onConfirm, selectedTaskEdit, open, setOpen }) => {
   const { Option } = Select;
-  const [visible, setVisible] = useState(false);
-  const [form] = Form.useForm(); // Crear la referencia del formulario
+  const [form] = Form.useForm();
+  const navigate = useNavigate(); // Hook para redirigir
 
   useEffect(() => {
-    console.log(selectedTaskEdit);
     if (selectedTaskEdit) {
       form.setFieldsValue({
         name: selectedTaskEdit.name || '',
         description: selectedTaskEdit.description || '',
-        user: selectedTaskEdit.user._id || '',
+        user: selectedTaskEdit.user ? selectedTaskEdit.user._id : '',
         resume: selectedTaskEdit.resume || '',
       });
+      // Si esta editando, el path /edit/{id}
     } else {
       form.resetFields();
     }
-  }, [selectedTaskEdit, form]);
+  }, [selectedTaskEdit, form, navigate]);
 
   const postTask = async fields => {
     try {
@@ -37,7 +42,7 @@ const CmpInsertTask = ({ onConfirm, selectedTaskEdit }) => {
   const putTask = async fields => {
     try {
       const resp = await axios.put(
-        `${URLAPi}/api/task?taskId=${selectedTaskEdit._id}`,
+        `${URLAPi}/api/task/edit/${selectedTaskEdit._id}`,
         fields
       );
       console.log(resp);
@@ -53,23 +58,35 @@ const CmpInsertTask = ({ onConfirm, selectedTaskEdit }) => {
     } else {
       await postTask(values);
     }
-
     form.resetFields();
+    setOpen(false);
+    navigate('/tareas');
   };
 
   return (
     <section className="form-section">
-      {visible ? (
-        <CloseOutlined className="icon" onClick={() => setVisible(!visible)} />
-      ) : (
-        <PlusCircleOutlined
-          className="icon"
-          onClick={() => setVisible(!visible)}
-        />
-      )}
-
-      {visible && (
-        <Form form={form} onFinish={handleFinish} className="form">
+      <Button
+        type="default"
+        onClick={() => {
+          form.resetFields();
+          setOpen(true);
+          navigate('/tareas/crear');
+        }}
+        icon={<PlusCircleOutlined />}
+        style={{ marginLeft: '0.5rem' }}
+      >
+        Nueva
+      </Button>
+      <Drawer
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          navigate('/tareas');
+        }}
+        title={selectedTaskEdit ? 'Editar Tarea' : 'Nueva Tarea'}
+        placement="right"
+      >
+        <Form form={form} onFinish={handleFinish}>
           <Form.Item
             name="name"
             rules={[
@@ -103,7 +120,7 @@ const CmpInsertTask = ({ onConfirm, selectedTaskEdit }) => {
             <Select
               showSearch
               optionFilterProp="children"
-              placeholder=" Selecciona un usuario"
+              placeholder="Selecciona un usuario"
             >
               <Option value="66720887f3d27a4d4c6c5e8d">POTRO</Option>
               <Option value="6675bce74e95d2fa340d9e3c">PABLO</Option>
@@ -121,13 +138,28 @@ const CmpInsertTask = ({ onConfirm, selectedTaskEdit }) => {
             <Input placeholder="Resumen" />
           </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Confirmar
-            </Button>
-          </Form.Item>
+          <Flex gap="middle" justify="end">
+            <Form.Item>
+              <Button
+                type="default"
+                onClick={() => {
+                  setOpen(false);
+                  form.resetFields();
+                  navigate('/tareas');
+                }}
+                icon={<CloseOutlined />}
+              >
+                Cancelar
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" icon={<CheckOutlined />}>
+                Confirmar
+              </Button>
+            </Form.Item>
+          </Flex>
         </Form>
-      )}
+      </Drawer>
     </section>
   );
 };

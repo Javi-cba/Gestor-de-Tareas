@@ -66,6 +66,8 @@
 .listss {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
 }
@@ -73,14 +75,14 @@
 .buttonsList {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 0rem;
   margin-right: 1rem;
 }
 
 .iconList {
   font-size: 45px;
   cursor: pointer;
-  margin: 1rem;
+  margin: 0.5rem;
   border-radius: 10%;
   border: 1px solid black;
 }
@@ -93,7 +95,7 @@
 .iconListSelected {
   font-size: 45px;
   cursor: pointer;
-  margin: 1rem;
+  margin: 0.5rem;
   border-radius: 10%;
   color: #4379c4;
   border: 1px solid #4379c4;
