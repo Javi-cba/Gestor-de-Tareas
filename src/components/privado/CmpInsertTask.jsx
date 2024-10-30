@@ -10,7 +10,13 @@ import axios from 'axios';
 
 const URLAPi = process.env.REACT_APP_URL_API_BACK;
 
-const CmpInsertTask = ({ onConfirm, selectedTaskEdit, open, setOpen }) => {
+const CmpInsertTask = ({
+  onConfirm,
+  setSelectedTask,
+  selectedTaskEdit,
+  open,
+  setOpen,
+}) => {
   const { Option } = Select;
   const [form] = Form.useForm();
   const navigate = useNavigate(); // Hook para redirigir
@@ -23,6 +29,7 @@ const CmpInsertTask = ({ onConfirm, selectedTaskEdit, open, setOpen }) => {
         user: selectedTaskEdit.user ? selectedTaskEdit.user._id : '',
         resume: selectedTaskEdit.resume || '',
       });
+      setSelectedTask(null);
       // Si esta editando, el path /edit/{id}
     } else {
       form.resetFields();
@@ -42,7 +49,7 @@ const CmpInsertTask = ({ onConfirm, selectedTaskEdit, open, setOpen }) => {
   const putTask = async fields => {
     try {
       const resp = await axios.put(
-        `${URLAPi}/api/task/edit/${selectedTaskEdit._id}`,
+        `${URLAPi}/api/task/${selectedTaskEdit._id}`,
         fields
       );
       console.log(resp);

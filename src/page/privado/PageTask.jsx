@@ -47,6 +47,7 @@ const PageTask = () => {
         onConfirm={fetchData}
         open={Open}
         setOpen={setOpen}
+        setSelectedTask={setSelectedTask}
         selectedTaskEdit={selectedTask}
       />
       <CmpFilterTask onChange={setFiltroBusq} tasks={getTasks} />
