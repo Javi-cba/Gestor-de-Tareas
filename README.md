@@ -15,10 +15,9 @@ La aplicación web ofrece las siguientes funcionalidades:
 
 - **Eliminar tarea**: Los usuarios pueden eliminar las tareas que ya no necesiten.
 
-- **Ver tareas**: Los usuarios pueden consultar todas sus tareas, filtrarlas por estado (completadas/no completadas) y ordenarlas por fecha de creación o vencimiento.
+- **Ver tareas**: Los usuarios pueden consultar todas las tareas y también filtrarlas por nombre y/o usuario.
 
 
----
 
 ## Instalación
 
@@ -26,7 +25,7 @@ Sigue estos pasos para ejecutar el proyecto en tu máquina local:
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/TuUsuario/Gestor-de-Tareas
+   git clone https://github.com/Javi-cba/Gestor-de-Tareas
    ```
    
 2. Navega al directorio:
